@@ -147,7 +147,7 @@ def main_form(request):
  			#category = Category.objects.all()
 			#description = Description.objects.all()
 			message = 'Please Select Department'
-			forms = {'date_form':DateRangeSelectionForm(request.POST),'dept_form':dept_form,#'formset': formset,
+			forms = {'date_form':DateRangeSelectionForm(request.POST),#'formset': formset,
 			'waste_stored': waste_stored,'waste_sent':waste_sent,'user':user,
 			'user_selections': user_selections,'user_selections_two': user_selections_two,
 			'waste_gen':waste_gen,'message':message}
@@ -221,7 +221,6 @@ def generate_report(request):
 		department = org
 	else:
 		department = Department.objects.get(user=user.id)
-		add = 'GNDEC'
 		print department
 	return render(request,'src/report.html',{'waste_generated':waste_generated,
 		'waste_sent':waste_sent,'waste_stored':waste_stored,'org':department,'add':add})

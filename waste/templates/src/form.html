@@ -17,19 +17,7 @@
 	<form role="form" method="POST" action=''>
 		            {% csrf_token %}
 <div style="color:red">{{message}}</div>
-
-     <table class='form-table-main'>
-    	<div class="form-group">
-    	{% for fields in dept_form %}
-    	<tr>
-    		<td><label for="gen_category">{{ fields.label_tag }}</label></td>
-			
-		<td>{{ fields }}</td>
-	</tr>
-	{% endfor %}
-	</div>
-</table>
-    <hr>
+<input type="hidden" name="select_department" value="{{user.id}}">
     <h3>E-waste handled/generated</h3>
  
     <table class='form-table-main'>

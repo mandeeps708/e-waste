@@ -221,6 +221,7 @@ def generate_report(request):
 		department = org
 	else:
 		department = Department.objects.get(user=user.id)
+		add = 'GNDEC'
 		print department
 	return render(request,'src/report.html',{'waste_generated':waste_generated,
 		'waste_sent':waste_sent,'waste_stored':waste_stored,'org':department,'add':add})

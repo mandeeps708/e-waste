@@ -11,23 +11,23 @@ def calculate_generated(request):
 
 	if user.is_superuser:
   		categories = WasteGenerated.objects.values_list('category_id',flat=True).\
-			filter(date=unicode(newdate)).distinct()
+			filter(date__range=[newdate,newdatetwo]).distinct()
 		# categories = WasteGenerated.objects.values_list('category_id',flat=True).\
 		# 	filter(field__range=(newdate, newdatetwo))
 	else:
  		dept = Department.objects.get(user=user.id)
-		categories = WasteGenerated.objects.filter(department=dept.id,date=newdate).values_list('category_id',flat=True).\
+		categories = WasteGenerated.objects.filter(department=dept.id,date__range=[newdate,newdatetwo]).values_list('category_id',flat=True).\
 			distinct()
 	generated = []
 	for val in categories:
 		temp = {}
 		desc = WasteGenerated.objects.values_list('description__description',flat=True).\
-			filter(category = val,date=newdate).distinct()
+			filter(category = val,date__range=[newdate,newdatetwo]).distinct()
 		category = Category.objects.values('category').filter(id = val)[0]
 		try:
-			total = WasteGenerated.objects.filter(department=dept.id,date=newdate).filter(category=val,date=newdate).aggregate(Sum('quantity'))
+			total = WasteGenerated.objects.filter(department=dept.id,date__range=[newdate,newdatetwo]).filter(category=val,date__range=[newdate,newdatetwo]).aggregate(Sum('quantity'))
 		except:
-			total = WasteGenerated.objects.filter(category=val,date=newdate).aggregate(Sum('quantity'))
+			total = WasteGenerated.objects.filter(category=val,date__range=[newdate,newdatetwo]).aggregate(Sum('quantity'))
 		temp['desc'] = desc
 		temp['category'] = category
 		temp['total'] = total['quantity__sum']
@@ -39,6 +39,8 @@ def calculate_stored(super_user,request):
 	newdate = ''
 	date = request.POST['date'].split("/")
 	newdate = date[2] + "-" + date[0] + "-" + date[1]
+	datetwo = request.POST['datetwo'].split("/")
+	newdatetwo = datetwo[2] + "-" + datetwo[0] + "-" + datetwo[1]
 	print date[2]
 	print date[1]
 	print date[0]
@@ -48,19 +50,19 @@ def calculate_stored(super_user,request):
 	else:
 		user = request.user
 		dept = Department.objects.get(user=user.id)
-		categories = WasteStored.objects.filter(department=dept.id,date=newdate).values_list('category_id',flat=True).\
+		categories = WasteStored.objects.filter(department=dept.id,date__range=[newdate,newdatetwo]).values_list('category_id',flat=True).\
 			distinct()
 
 	generated = []
 	for val in categories:
 		temp = {}
 		desc = WasteStored.objects.values_list('description__description',flat=True).\
-			filter(category = val, date=newdate).distinct()
+			filter(category = val, date__range=[newdate,newdatetwo]).distinct()
 		category = Category.objects.values('category').filter(id = val)[0]
 		try:
-			total = WasteStored.objects.filter(department=dept.id, date=newdate).filter(category=val,date=newdate).aggregate(Sum('quantity'))
+			total = WasteStored.objects.filter(department=dept.id, date__range=[newdate,newdatetwo]).filter(category=val,date__range=[newdate,newdatetwo]).aggregate(Sum('quantity'))
 		except:
-			total = WasteStored.objects.filter(category=val, date=newdate).aggregate(Sum('quantity'))
+			total = WasteStored.objects.filter(category=val, date__range=[newdate,newdatetwo]).aggregate(Sum('quantity'))
 
 		temp['desc'] = desc
 		temp['category'] = category
@@ -73,23 +75,25 @@ def calculate_sent(request):
 	newdate = ''
 	date = request.POST['date'].split("/")
 	newdate = date[2] + "-" + date[0] + "-" + date[1]
+	datetwo = request.POST['datetwo'].split("/")
+	newdatetwo = datetwo[2] + "-" + datetwo[0] + "-" + datetwo[1]
 	if user.is_superuser:
-		categories = WasteSentToRecycler.objects.values_list('category_id',flat=True).filter(date=newdate).\
+		categories = WasteSentToRecycler.objects.values_list('category_id',flat=True).filter(date__range=[newdate,newdatetwo]).\
 		distinct()
 	else:
 		dept = Department.objects.get(user=user.id)
-		categories = WasteSentToRecycler.objects.filter(department=dept.id,date=newdate).\
+		categories = WasteSentToRecycler.objects.filter(department=dept.id,date__range=[newdate,newdatetwo]).\
 		values_list('category_id',flat=True).distinct()
 	generated = []
 	for val in categories:
 		temp = {}
 		desc = WasteSentToRecycler.objects.values_list('description__description',flat=True).\
-			filter(category = val, date=newdate).distinct()
+			filter(category = val, date__range=[newdate,newdatetwo]).distinct()
 		category = Category.objects.values('category').filter(id = val)[0]
 		try:
-			total = WasteSentToRecycler.objects.filter(department=dept.id, date=newdate).filter(category=val).aggregate(Sum('quantity'))
+			total = WasteSentToRecycler.objects.filter(department=dept.id, date__range=[newdate,newdatetwo]).filter(category=val).aggregate(Sum('quantity'))
 		except:
-			total = WasteSentToRecycler.objects.filter(category=val, date=newdate).aggregate(Sum('quantity'))
+			total = WasteSentToRecycler.objects.filter(category=val, date__range=[newdate,newdatetwo]).aggregate(Sum('quantity'))
 		temp['desc'] = desc
 		temp['desc'] = desc
 		temp['category'] = category

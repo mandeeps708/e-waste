@@ -6,9 +6,14 @@ def calculate_generated(request):
 	newdate = ''
 	date = request.POST['date'].split("/")
 	newdate = date[2] + "-" + date[0] + "-" + date[1]
+	datetwo = request.POST['datetwo'].split("/")
+	newdatetwo = datetwo[2] + "-" + datetwo[0] + "-" + datetwo[1]
+
 	if user.is_superuser:
   		categories = WasteGenerated.objects.values_list('category_id',flat=True).\
 			filter(date=unicode(newdate)).distinct()
+		# categories = WasteGenerated.objects.values_list('category_id',flat=True).\
+		# 	filter(field__range=(newdate, newdatetwo))
 	else:
  		dept = Department.objects.get(user=user.id)
 		categories = WasteGenerated.objects.filter(department=dept.id,date=newdate).values_list('category_id',flat=True).\
@@ -34,6 +39,9 @@ def calculate_stored(super_user,request):
 	newdate = ''
 	date = request.POST['date'].split("/")
 	newdate = date[2] + "-" + date[0] + "-" + date[1]
+	print date[2]
+	print date[1]
+	print date[0]
 	if super_user == True:
 		categories = WasteStored.objects.values_list('category_id',flat=True).filter(date=newdate).\
 		distinct()

@@ -19,7 +19,7 @@
         {% endif %}
 	<form role="form" method="POST" action='{% url 'waste.src.views.add_selection' %}'>
 		            {% csrf_token %}
-<table>
+<!-- <table>
 <tr>
 <td>
 Select Date
@@ -28,7 +28,7 @@ Select Date
 <input type="text" class="datepicker" name="date">
 </td>
 </tr>
-</table>
+</table> -->
 
     <div class="form-group">{{form}}</div>
     <input type="submit" class="btn btn-info btn-large" value="Submit">

@@ -9,6 +9,9 @@ class DateRangeSelectionForm(forms.Form):
     date = forms.DateField(
         widget=DateTimePicker(options={"format": "YYYY-MM-DD",
                                        "pickTime": False}))
+    # date2 = forms.DateField(
+    # 	widget=DateTimePicker(options={"format": "YYYY-MM-DD",
+    # 									"pickTime": False}))
 
 class DepartmentSelect(forms.Form):
 	select_department = forms.ModelChoiceField(queryset=Department.objects.all())
